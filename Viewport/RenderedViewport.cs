@@ -234,7 +234,10 @@ namespace RhinoCycles
 		{
 			if (m_cycles != null && m_cycles.Session != null && m_cycles.State == State.Rendering)
 			{
+				uint oldcrc = GetCurrentCRC();
 				m_cycles.Session.RhinoDraw(m_cycles.RenderDimension.Width, m_cycles.RenderDimension.Height);
+				uint newcrc = SetCRC(m_cycles.Database.GetQueueView());
+				ssd.WriteLine("Old {0} New {1}", oldcrc, newcrc);
 			}
 
 			return true;
