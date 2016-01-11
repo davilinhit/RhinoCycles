@@ -66,7 +66,7 @@ namespace RhinoCycles
 			m_available = false; // the renderer hasn't started yet. It'll tell us when it has.
 			m_last_frame_drawn = false;
 
-			AsyncRenderContext a_rc = new ViewportRenderEngine(doc.RuntimeSerialNumber, Plugin.IdFromName("RhinoCycles"), rhinoView);
+			AsyncRenderContext a_rc = new ViewportRenderEngine(doc.RuntimeSerialNumber, Plugin.IdFromName("RhinoCycles"), rhinoView, this);
 			m_cycles = (ViewportRenderEngine)a_rc;
 
 			m_cycles.RenderSizeUnset += m_cycles_RenderSizeUnset; // for viewport changes need to listen to sizes.
@@ -236,13 +236,13 @@ namespace RhinoCycles
 			{
 				uint oldcrc = GetCurrentCRC();
 				m_cycles.Session.RhinoDraw(m_cycles.RenderDimension.Width, m_cycles.RenderDimension.Height);
-				uint newcrc = SetCRC(m_cycles.Database.GetQueueView());
-				ssd.WriteLine("Old {0} New {1}", oldcrc, newcrc);
+				SetCRC(m_cycles.CurrentViewportCRC);
+				//uint newcrc = SetCRC(m_cycles.Database.GetQueueView());
+				ssd.WriteLine("Old {0} New {1}", oldcrc, m_cycles.CurrentViewportCRC);
 			}
 
 			return true;
 		}
-
 
 		public override string HudProductName()
 		{

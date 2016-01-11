@@ -498,6 +498,8 @@ namespace RhinoCycles.Database
 				viewportRenderEngine.UnsetRenderSize();
 			}
 
+			m_render_engine.CurrentViewportCRC = view.Crc;
+
 			var ha = size.Width > size.Height ? view.Horizontal: view.Vertical;
 
 			var angle = (float) Math.Atan(Math.Tan(ha)/view.ViewAspectRatio) * 2.0f;
@@ -607,6 +609,13 @@ namespace RhinoCycles.Database
 			// then convert to Cycles orientation
 			t = t * Transform.RhinoToCyclesCam;
 
+			uint crc = 0;
+			var viewportRenderEngine = m_render_engine as ViewportRenderEngine;
+			if (viewportRenderEngine != null)
+			{
+				crc = viewportRenderEngine.GetViewCRC(viewInfo);
+			}
+
 			// ready, lets push our data
 			var cyclesview = new CyclesView
 			{
@@ -621,6 +630,7 @@ namespace RhinoCycles.Database
 				TwoPoint = twopoint,
 				Width = w,
 				Height = h,
+				Crc = crc
 			};
 			m_camera_db.AddViewChange(cyclesview);
 		}

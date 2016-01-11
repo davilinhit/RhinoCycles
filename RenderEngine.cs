@@ -174,6 +174,7 @@ namespace RhinoCycles
 			}
 		}
 
+		public uint CurrentViewportCRC { get; set; }
 		protected readonly uint m_doc_serialnumber;
 		protected readonly RhinoView m_view;
 		private readonly bool m_interactive;

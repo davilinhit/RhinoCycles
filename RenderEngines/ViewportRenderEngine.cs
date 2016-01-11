@@ -19,14 +19,17 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using ccl;
 using Rhino.Display;
+using Rhino.DocObjects;
 using sdd = System.Diagnostics.Debug;
 
 namespace RhinoCycles
 {
 	public class ViewportRenderEngine : RenderEngine
 	{
-		public ViewportRenderEngine(uint docRuntimeSerialNumber, Guid pluginId, RhinoView view) : base(pluginId, docRuntimeSerialNumber, view, true)
+		private RenderedViewport m_rendered_viewport; // reference to the viewport we're from.
+		public ViewportRenderEngine(uint docRuntimeSerialNumber, Guid pluginId, RhinoView view, RenderedViewport renderedViewport) : base(pluginId, docRuntimeSerialNumber, view, true)
 		{
+			m_rendered_viewport = renderedViewport;
 			RenderThread = null;
 			Client = new Client();
 			State = State.Rendering;
@@ -40,6 +43,11 @@ namespace RhinoCycles
 			CSycles.log_to_stdout(false);
 #endregion
 			
+		}
+
+		public uint GetViewCRC(ViewInfo view)
+		{
+			return m_rendered_viewport.ComputeViewportCRC(view);
 		}
 
 		private readonly object size_setter_lock = new object();
@@ -157,7 +165,6 @@ namespace RhinoCycles
 				Session.SetPause(true);
 				if (UploadData())
 				{
-					State = State.Rendering;
 					var size = RenderDimension;
 
 					// lets first reset session
@@ -166,6 +173,7 @@ namespace RhinoCycles
 					Session.Scene.Reset();
 
 					TriggerSynchronized();
+					State = State.Rendering;
 				}
 
 				if (CancelRender)
