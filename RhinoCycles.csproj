@@ -67,26 +67,26 @@
       <CustomCommands>
         <Command>
           <type>AfterBuild</type>
-          <command>mkdir -p "$(RhinoBinDir)/Release/Plug-ins/RhinoCycles/licenses"</command>
+          <command>mkdir -p $(OutputPath)/RhinoCycles/licenses</command>
         </Command>
         <Command>
           <type>AfterBuild</type>
-          <command>cp "../cycles/cycles/src/doc/license/*.txt" "$(RhinoBinDir)/Release/Plug-ins/RhinoCycles/licenses"</command>
+          <command>cp ../cycles/cycles/src/doc/license/*.txt $(OutputPath)/RhinoCycles/licenses</command>
           <workingdir>${ProjectDir}</workingdir>
         </Command>
         <Command>
           <type>AfterBuild</type>
-          <command>cp "../cycles/cycles/third_party/cuew/LICENSE" "$(RhinoBinDir)/Release/Plug-ins/RhinoCycles/licenses/cuew.txt"</command>
+          <command>cp ../cycles/cycles/third_party/cuew/LICENSE $(OutputPath)/RhinoCycles/licenses/cuew.txt</command>
           <workingdir>${ProjectDir}</workingdir>
         </Command>
         <Command>
           <type>AfterBuild</type>
-          <command>rm "$(RhinoBinDir)/Release/Plug-ins/RhinoCycles/licenses/CMakeLists.txt"</command>
+          <command>rm $(OutputPath)/RhinoCycles/licenses/CMakeLists.txt</command>
           <workingdir>${ProjectDir}</workingdir>
         </Command>
         <Command>
           <type>AfterBuild</type>
-          <command>rm "$(RhinoBinDir)/Release/Plug-ins/RhinoCycles/licenses/OSL.txt"</command>
+          <command>rm $(OutputPath)/RhinoCycles/licenses/OSL.txt</command>
           <workingdir>${ProjectDir}</workingdir>
         </Command>
       </CustomCommands>
