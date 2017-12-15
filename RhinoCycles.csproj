@@ -25,34 +25,6 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>anycpu</PlatformTarget>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <CustomCommands>
-      <CustomCommands>
-        <Command>
-          <type>AfterBuild</type>
-          <command>mkdir -p $(OutputPath)/RhinoCycles/licenses</command>
-        </Command>
-        <Command>
-          <type>AfterBuild</type>
-          <command>cp ../cycles/cycles/src/doc/license/*.txt $(OutputPath)/RhinoCycles/licenses</command>
-          <workingdir>${ProjectDir}</workingdir>
-        </Command>
-        <Command>
-          <type>AfterBuild</type>
-          <command>cp ../cycles/cycles/third_party/cuew/LICENSE $(OutputPath)/RhinoCycles/licenses/cuew.txt</command>
-          <workingdir>${ProjectDir}</workingdir>
-        </Command>
-        <Command>
-          <type>AfterBuild</type>
-          <command>rm $(OutputPath)/RhinoCycles/licenses/CMakeLists.txt</command>
-          <workingdir>${ProjectDir}</workingdir>
-        </Command>
-        <Command>
-          <type>AfterBuild</type>
-          <command>rm $(OutputPath)/RhinoCycles/licenses/OSL.txt</command>
-          <workingdir>${ProjectDir}</workingdir>
-        </Command>
-      </CustomCommands>
-    </CustomCommands>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -63,34 +35,6 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <CustomCommands>
-      <CustomCommands>
-        <Command>
-          <type>AfterBuild</type>
-          <command>mkdir -p $(OutputPath)/RhinoCycles/licenses</command>
-        </Command>
-        <Command>
-          <type>AfterBuild</type>
-          <command>cp ../cycles/cycles/src/doc/license/*.txt $(OutputPath)/RhinoCycles/licenses</command>
-          <workingdir>${ProjectDir}</workingdir>
-        </Command>
-        <Command>
-          <type>AfterBuild</type>
-          <command>cp ../cycles/cycles/third_party/cuew/LICENSE $(OutputPath)/RhinoCycles/licenses/cuew.txt</command>
-          <workingdir>${ProjectDir}</workingdir>
-        </Command>
-        <Command>
-          <type>AfterBuild</type>
-          <command>rm $(OutputPath)/RhinoCycles/licenses/CMakeLists.txt</command>
-          <workingdir>${ProjectDir}</workingdir>
-        </Command>
-        <Command>
-          <type>AfterBuild</type>
-          <command>rm $(OutputPath)/RhinoCycles/licenses/OSL.txt</command>
-          <workingdir>${ProjectDir}</workingdir>
-        </Command>
-      </CustomCommands>
-    </CustomCommands>
   </PropertyGroup>
   <PropertyGroup>
     <RunPostBuildEvent>Always</RunPostBuildEvent>
@@ -242,21 +186,20 @@
   <ItemGroup>
     <None Include="Icons\Cycles_viewport_properties.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <LicenseFiles Include="$(ProjectDir)..\cycles\cycles\src\doc\license\*.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent Condition="'$(OS)' == 'Windows_NT'">
-MkDir "$(RhinoBinDir)\$(Configuration)\Plug-ins\RhinoCycles\licenses"
-Copy /Y /A "$(ProjectDir)..\cycles\cycles\src\doc\license\*.txt" "$(RhinoBinDir)\$(Configuration)\Plug-ins\RhinoCycles\licenses"
-Copy /Y /A "$(ProjectDir)..\cycles\pthreads\COPYING" /A "$(RhinoBinDir)\$(Configuration)\Plug-ins\RhinoCycles\licenses\pthreads.txt"
-Copy /Y "$(ProjectDir)..\cycles\cycles\third_party\cuew\LICENSE" /A "$(RhinoBinDir)\$(Configuration)\Plug-ins\RhinoCycles\licenses\cuew.txt"
-Del "$(RhinoBinDir)\$(Configuration)\Plug-ins\RhinoCycles\licenses\CMakeLists.txt"
-Del "$(RhinoBinDir)\$(Configuration)\Plug-ins\RhinoCycles\licenses\OSL.txt"
-</PostBuildEvent>
-  </PropertyGroup>
+  <Target Name="BeforeBuild">
+      <MakeDir Directories="$(RhinoBinDir)\$(Configuration)\Plug-ins\RhinoCycles\licenses" />
+      <Copy SourceFiles="@(LicenseFiles)" DestinationFolder="$(RhinoBinDir)\$(Configuration)\Plug-ins\RhinoCycles\licenses" OverwriteReadOnlyFiles="True" />
+      <Copy SourceFiles="$(ProjectDir)..\cycles\cycles\third_party\cuew\LICENSE" DestinationFiles="$(RhinoBinDir)\$(Configuration)\Plug-ins\RhinoCycles\licenses\cuew.txt" OverwriteReadOnlyFiles="True" />
+      <Copy SourceFiles="$(ProjectDir)..\cycles\pthreads\COPYING" DestinationFiles="$(RhinoBinDir)\$(Configuration)\Plug-ins\RhinoCycles\licenses\pthreads.txt" OverwriteReadOnlyFiles="True" />
+      <Delete Files="$(RhinoBinDir)\$(Configuration)\Plug-ins\RhinoCycles\licenses\CMakeLists.txt" />
+      <Delete Files="$(RhinoBinDir)\$(Configuration)\Plug-ins\RhinoCycles\licenses\OSL.txt" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
   <Target Name="AfterBuild">
   </Target>
   -->
